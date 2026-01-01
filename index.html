@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Door Reveal Activity</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Brand Colours:
+           Midnight Blue: #1f2a52
+           Teal: #00bec7
+           Light Aqua: #d2f0f0
+           Slate Grey: #abb5bf
+        */
+        :root {
+            --brand-midnight: #1f2a52;
+            --brand-teal: #00bec7;
+            --brand-aqua: #d2f0f0;
+            --brand-slate: #abb5bf;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(31, 42, 82, 0.1);
+            overflow: hidden;
+        }
+
+        .header-bar {
+            background-color: var(--brand-midnight);
+            padding: 1.5rem 2.5rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .content-display-area {
+            background-color: white;
+            padding: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .content-display-area {
+                flex-direction: row;
+            }
+        }
+
+        .reveal-section {
+            flex: 1;
+            border: 2px solid var(--brand-aqua);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            background-color: var(--brand-aqua);
+            color: var(--brand-midnight);
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--brand-aqua);
+        }
+
+        .reveal-wrapper {
+            position: relative;
+            flex-grow: 1;
+            height: 220px;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        .reveal-content {
+            position: absolute;
+            inset: 0;
+            padding: 24px;
+            text-align: left;
+            color: var(--brand-midnight);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .reveal-cover {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background-color: var(--brand-aqua);
+            transition: width 0.3s ease-out, left 0.3s ease-out, right 0.3s ease-out;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reveal-cover::after {
+            content: 'SLIDE TO REVEAL';
+            font-weight: 800;
+            color: var(--brand-midnight);
+            opacity: 0.3;
+            letter-spacing: 0.2em;
+            font-size: 0.75rem;
+        }
+
+        .reveal-handle {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background-color: var(--brand-teal);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .reveal-handle:hover {
+            transform: translateY(-50%) scale(1.1);
+            background-color: var(--brand-midnight);
+        }
+
+        .reveal-handle:active {
+            cursor: grabbing;
+        }
+
+        #preHandle::before {
+            content: '◀';
+            font-size: 0.8rem;
+        }
+        #postHandle::before {
+            content: '▶';
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- New Header Section -->
+        <div class="header-bar">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Sliding Door</h1>
+            <p class="text-sm opacity-80 mt-1 italic">Slide the handles to discover the hidden content.</p>
+        </div>
+
+        <div class="content-display-area">
+            <!-- Phase One Section -->
+            <div class="reveal-section">
+                <div class="section-header">
+                    <h3>Lorem Ipsum Phase 1</h3>
+                </div>
+                <div class="reveal-wrapper">
+                    <div class="reveal-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </div>
+                    <div class="reveal-cover" id="preCover"></div>
+                    <div class="reveal-handle" id="preHandle"></div>
+                </div>
+            </div>
+
+            <!-- Phase Two Section -->
+            <div class="reveal-section">
+                <div class="section-header">
+                    <h3>Lorem Ipsum Phase 2</h3>
+                </div>
+                <div class="reveal-wrapper">
+                    <div class="reveal-content">
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                    </div>
+                    <div class="reveal-cover" id="postCover"></div>
+                    <div class="reveal-handle" id="postHandle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setupRevealSlider(coverId, handleId, slideDirection) {
+            const cover = document.getElementById(coverId);
+            const handle = document.getElementById(handleId);
+            const wrapper = cover.parentElement;
+
+            let isDragging = false;
+            let initialMouseX;
+            let initialHandleLeft;
+
+            function resetSlider() {
+                const wrapperWidth = wrapper.offsetWidth;
+                const handleHalfWidth = handle.offsetWidth / 2;
+
+                if (slideDirection === 'cover-slides-left') {
+                    cover.style.left = '0px';
+                    cover.style.width = wrapperWidth + 'px';
+                    handle.style.left = (wrapperWidth - handleHalfWidth) + 'px';
+                } else if (slideDirection === 'cover-slides-right') {
+                    cover.style.right = '0px';
+                    cover.style.width = wrapperWidth + 'px';
+                    handle.style.left = -handleHalfWidth + 'px';
+                }
+            }
+
+            handle.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                initialMouseX = e.clientX;
+                initialHandleLeft = handle.offsetLeft;
+                cover.style.transition = 'none';
+                handle.style.transition = 'none';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                const deltaX = e.clientX - initialMouseX;
+                let newHandleLeft = initialHandleLeft + deltaX;
+                const handleHalfWidth = handle.offsetWidth / 2;
+                const wrapperWidth = wrapper.offsetWidth;
+
+                newHandleLeft = Math.max(-handleHalfWidth, Math.min(newHandleLeft, wrapperWidth - handleHalfWidth));
+                handle.style.left = newHandleLeft + 'px';
+
+                if (slideDirection === 'cover-slides-left') {
+                    cover.style.left = '0px';
+                    cover.style.width = (newHandleLeft + handleHalfWidth) + 'px';
+                } else if (slideDirection === 'cover-slides-right') {
+                    cover.style.right = '0px';
+                    cover.style.width = (wrapperWidth - (newHandleLeft + handleHalfWidth)) + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                cover.style.transition = 'width 0.3s ease-out, left 0.3s ease-out, right 0.3s ease-out';
+                handle.style.transition = 'background-color 0.2s ease, transform 0.2s ease';
+            });
+
+            // Touch events
+            handle.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                initialMouseX = e.touches[0].clientX;
+                initialHandleLeft = handle.offsetLeft;
+                cover.style.transition = 'none';
+                handle.style.transition = 'none';
+                e.preventDefault();
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.touches[0].clientX - initialMouseX;
+                let newHandleLeft = initialHandleLeft + deltaX;
+                const handleHalfWidth = handle.offsetWidth / 2;
+                const wrapperWidth = wrapper.offsetWidth;
+
+                newHandleLeft = Math.max(-handleHalfWidth, Math.min(newHandleLeft, wrapperWidth - handleHalfWidth));
+                handle.style.left = newHandleLeft + 'px';
+
+                if (slideDirection === 'cover-slides-left') {
+                    cover.style.left = '0px';
+                    cover.style.width = (newHandleLeft + handleHalfWidth) + 'px';
+                } else if (slideDirection === 'cover-slides-right') {
+                    cover.style.right = '0px';
+                    cover.style.width = (wrapperWidth - (newHandleLeft + handleHalfWidth)) + 'px';
+                }
+            });
+
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+                cover.style.transition = 'width 0.3s ease-out, left 0.3s ease-out, right 0.3s ease-out';
+                handle.style.transition = 'background-color 0.2s ease, transform 0.2s ease';
+            });
+
+            resetSlider();
+            window.addEventListener('resize', resetSlider);
+        }
+
+        window.onload = function() {
+            setupRevealSlider('preCover', 'preHandle', 'cover-slides-left');
+            setupRevealSlider('postCover', 'postHandle', 'cover-slides-right');
+        };
+    </script>
+</body>
+</html>
